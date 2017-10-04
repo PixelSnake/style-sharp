@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StyleSharp.Tokenizer
 {
-    internal abstract class Token
+    public abstract class Token
     {
         public string Data { get; protected set; }
 

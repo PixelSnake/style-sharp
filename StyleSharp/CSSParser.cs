@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StyleSharp.Tokenizer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,11 @@ namespace StyleSharp
             Console.WriteLine("Parsing...");
 
             Tokenizer.Tokenizer t = new Tokenizer.Tokenizer(css);
-            Console.WriteLine(t.GetNextSelector());
+            StyleSet s;
+            while ((s = t.GetNextStyleSet()) != null)
+            {
+                //Console.WriteLine($"{s.Element} has {s.Rules.Count} style rule(s)");
+            }
         }
     }
 }

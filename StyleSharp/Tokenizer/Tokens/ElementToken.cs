@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StyleSharp.Tokenizer.Tokens
 {
-    internal class ElementToken : Token
+    public class ElementToken : Token
     {
         internal string Selector { get; private set; }
         internal string[] ClassNames { get; private set; }
@@ -26,7 +26,7 @@ namespace StyleSharp.Tokenizer.Tokens
             if (selector == null
                 && (classNames == null || classNames.Length < 1)
                 && (ids == null || ids.Length < 1))
-                throw new ArgumentException("Empty selectors are not allowed");
+                throw new FormatException("Empty selectors are not allowed");
 
             Selector = selector?.Data;
 

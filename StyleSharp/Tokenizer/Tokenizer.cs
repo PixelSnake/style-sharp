@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StyleSharp.Tokenizer.Extensions;
 
 namespace StyleSharp.Tokenizer
 {
@@ -18,73 +19,98 @@ namespace StyleSharp.Tokenizer
             Data = data;
         }
 
-        //internal Token GetNextToken()
-        //{
-        //    if (Position + 2 >= Data.Length)
-        //        return null;
+        internal StyleSet GetNextStyleSet()
+        {
+            while (true)
+            {
+                try
+                {
+                    var selector = GetNextSelector();
+                    var rules = GetNextRules();
 
-        //    string buf = string.Empty;
-        //    buf += Data[Position++];
+                    foreach (var r in rules)
+                    {
+                        Console.WriteLine(r.Key + ":" + r.Value);
+                    }
 
-        //    while (true)
-        //    {
-        //        if (Position + 1 >= Data.Length)
-        //            break;
+                    return new StyleSet(selector, rules);
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+            }
+        }
 
-        //        char c = Data[Position];
+        internal RuleCollection GetNextRules()
+        {
+            if (Position >= Data.Length)
+                throw new FormatException();
 
-        //        Console.WriteLine(buf);
-        //        if (Delimiters.Contains(c))
-        //        {
-        //            Tokens.Add(Token.CreateToken(buf.Trim()));
-        //            buf = "";
+            char c;
+            while (Position + 1 < Data.Length && (c = Data[Position]) != '{')
+                Position++;
 
-        //            switch (c)
-        //            {
-        //                /* definition of an element selector is finished */
-        //                case ' ':
-        //                    Console.WriteLine(Tokens.Count);
+            var scopeEnd = Data.GetClosingScope(Position);
+            var scope = Data.Substring(Position + 1, scopeEnd - Position - 1).Trim();
+            Position = scopeEnd + 1;
 
-        //                    if (Tokens.Count < 1)
-        //                        break;
+            int i = 0;
+            string buf = "";
 
-        //                    Tokens.ElementNameToken selector = null;
-        //                    var classNames = new List<Tokens.ClassToken>();
-        //                    var ids = new List<Tokens.IdToken>();
+            RuleCollection rules = new RuleCollection();
+            string Property = "";
 
-        //                    foreach (Token t in Tokens)
-        //                    {
-        //                        switch (t)
-        //                        {
-        //                            case Tokens.ElementNameToken _t:
-        //                                selector = (selector == null ? _t : throw new ArgumentException("Unexpected ElementToken"));
-        //                                break;
+            while (true)
+            {
+                if (i >= scope.Length)
+                    break;
 
-        //                            case Tokens.ClassToken _t:
-        //                                classNames.Add(_t);
-        //                                break;
+                c = scope[i++];
 
-        //                            case Tokens.IdToken _t:
-        //                                ids.Add(_t);
-        //                                break;
-        //                        }
-        //                    }
+                if (Delimiters.Contains(c) && !char.IsWhiteSpace(c))
+                {
+                    if (buf.Length < 1)
+                        throw new FormatException($"Unexpected delimiter \"{c}\"");
 
-        //                    return new Tokens.ElementToken(selector, classNames.ToArray(), ids.ToArray());
-        //            }
-        //        }
+                    switch (c)
+                    {
+                        case ':':
+                            Property = buf.Trim();
+                            break;
 
-        //        buf += c;
-        //        Position++;
-        //    }
+                        case ';':
+                            if (Property.Length < 1)
+                                throw new FormatException("Unexpected ;");
 
-        //    if (buf.Length < 1)
-        //        throw new ArgumentException("Unexpected EOF");
-        //}
+                            string Value = buf.Trim();
+
+                            StyleValue.StyleValue val;
+                            StyleValue.StyleValueParser.TryParse(buf, out val);
+
+                            if (val == null)
+                                Console.WriteLine($"Could not parse \"{Value}\" - no matching parser found");
+                            else
+                                rules.Add(Property, val);
+
+                            Property = "";
+                            break;
+                    }
+
+                    buf = "";
+                }
+                else
+                {
+                    buf += c;
+                }
+            }
+
+            return rules;
+        }
 
         internal Tokens.ElementToken GetNextSelector()
         {
-            if (Position + 2 >= Data.Length)
+            if (Position >= Data.Length)
                 throw new FormatException();
 
             string buf = string.Empty;
@@ -94,12 +120,12 @@ namespace StyleSharp.Tokenizer
 
             while (true)
             {
-                if (Position + 1 >= Data.Length)
+                if (Position >= Data.Length)
                     break;
 
                 char c = Data[Position];
 
-                Console.WriteLine(buf);
+                //Console.WriteLine(buf);
                 if (Delimiters.Contains(c))
                 {
                     Tokens.Add(Token.CreateToken(buf.Trim()));
@@ -114,7 +140,7 @@ namespace StyleSharp.Tokenizer
 
                         /* definition of an element selector is finished */
                         default:
-                            Console.WriteLine(Tokens.Count);
+                            //Console.WriteLine(Tokens.Count);
 
                             if (Tokens.Count < 1)
                                 break;
@@ -128,7 +154,7 @@ namespace StyleSharp.Tokenizer
                                 switch (t)
                                 {
                                     case Tokens.ElementNameToken _t:
-                                        selector = (selector == null ? _t : throw new ArgumentException("Unexpected ElementToken"));
+                                        selector = (selector == null ? _t : throw new FormatException("Unexpected ElementToken"));
                                         break;
 
                                     case Tokens.ClassToken _t:
