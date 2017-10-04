@@ -23,8 +23,8 @@ namespace StyleSharp.Tokenizer
 
         public static Token CreateToken(string data)
         {
-            if (TagToken.Matches(data))
-                return new TagToken(data);
+            if (ElementNameToken.Match(data).Success)
+                return new ElementNameToken(data);
             else if (ClassToken.Match(data).Success)
                 return new ClassToken(data);
             else if (IdToken.Match(data).Success)

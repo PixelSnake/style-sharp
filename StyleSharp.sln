@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StyleSharp", "StyleSharp\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3EC522FB-0E3B-4FA2-8000-2E767FAB343E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOutput", "TestOutput\TestOutput.csproj", "{9FB66228-0662-4C13-AA81-F97F9F154E8C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5A54EE7-FFF4-4268-84B5-89E292E21E79} = {A5A54EE7-FFF4-4268-84B5-89E292E21E79}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +26,10 @@ Global
 		{3EC522FB-0E3B-4FA2-8000-2E767FAB343E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EC522FB-0E3B-4FA2-8000-2E767FAB343E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EC522FB-0E3B-4FA2-8000-2E767FAB343E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB66228-0662-4C13-AA81-F97F9F154E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB66228-0662-4C13-AA81-F97F9F154E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB66228-0662-4C13-AA81-F97F9F154E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB66228-0662-4C13-AA81-F97F9F154E8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

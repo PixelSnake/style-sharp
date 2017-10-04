@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace StyleSharp.Tokenizer.Tokens
 {
-    internal class IdToken : Token
+    internal class ElementNameToken : Token
     {
-        private static readonly string Pattern = @"^#(([a-zA-Z0-9]+[_-]?)+)$";
+        private static readonly string Pattern = @"^([a-zA-Z0-9_-]+)$";
 
-        public IdToken(string data) : base(data)
+        public ElementNameToken(string data) : base(data)
         {
             Match m = Match(data);
             if (!m.Success)
-                throw new FormatException("The id name provided does not follow CSS id rules");
+                throw new FormatException("The class name provided does not follow CSS class rules");
 
             Data = m.Groups[1].Value;
         }
