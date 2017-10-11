@@ -9,6 +9,6 @@ namespace StyleSharp.Tokenizer.StyleValue
 {
     public abstract class StyleValue
     {
-
+        public bool IsImportant { get; set; }
     }
 }

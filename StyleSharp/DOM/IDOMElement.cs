@@ -12,8 +12,8 @@ namespace StyleSharp.DOM
         IList<string> Classes { get; }
         IList<string> Ids { get; }
 
-        StyleSet Styles { get; set; }
+        RuleCollection Styles { get; set; }
 
-        IEnumerable<IDOMElement> Children { get; }
+        IList<IDOMElement> Children { get; }
     }
 }

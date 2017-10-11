@@ -9,9 +9,9 @@ namespace StyleSharp
     public class StyleSet
     {
         public Tokenizer.Tokens.ElementToken Selector { get; }
-        public Tokenizer.RuleCollection Rules { get; }
+        public RuleCollection Rules { get; }
 
-        internal StyleSet(Tokenizer.Tokens.ElementToken element, Tokenizer.RuleCollection rules)
+        internal StyleSet(Tokenizer.Tokens.ElementToken element, RuleCollection rules)
         {
             Selector = element;
             Rules = rules;

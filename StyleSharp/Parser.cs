@@ -14,6 +14,6 @@ namespace StyleSharp
             Parse(data);
         }
 
-        public abstract void Parse(string css);
+        public abstract StyleSheet Parse(string css);
     }
 }

@@ -24,6 +24,14 @@ namespace StyleSharp.Tokenizer.StyleValue
         {
             return Regex.Match(s, RegexString);
         }
+
+        public override bool Equals(object obj)
+        {
+            var val = (obj as SingleDimensionValue);
+            if (val == null)
+                return false;
+            return val.Value == Value && val.Unit == Unit;
+        }
     }
 
     public class SingleDimensionValueParser : StyleValueParser

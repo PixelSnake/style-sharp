@@ -9,18 +9,19 @@ namespace StyleSharp
 {
     public class CSSParser : Parser
     {
-        bool Outside = true;
-        
-        public override void Parse(string css)
+        public override StyleSheet Parse(string css)
         {
             Console.WriteLine("Parsing...");
 
+            StyleSheet sheet = new StyleSheet();
             Tokenizer.Tokenizer t = new Tokenizer.Tokenizer(css);
             StyleSet s;
             while ((s = t.GetNextStyleSet()) != null)
             {
-                //Console.WriteLine($"{s.Element} has {s.Rules.Count} style rule(s)");
+                sheet.Add(s);
             }
+
+            return sheet;
         }
     }
 }

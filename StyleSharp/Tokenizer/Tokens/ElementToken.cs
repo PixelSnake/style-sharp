@@ -10,18 +10,14 @@ namespace StyleSharp.Tokenizer.Tokens
     public class ElementToken : Token
     {
         internal string Selector { get; private set; }
-        internal string[] ClassNames { get; private set; }
-        internal string[] Ids { get; private set; }
+        internal HashSet<string> ClassNames { get; private set; }
+        internal HashSet<string> Ids { get; private set; }
 
         public ElementToken(Token selector, Token className, Token id)
             : this(selector, new Token[] { className }, new Token[] { id }) { }
 
         public ElementToken(Token selector, Token[] classNames, Token[] ids)
-            : base(
-                  (selector != null ? selector.Data : "") +
-                  (classNames != null && classNames.Length > 0 ? "." + String.Join<Token>(".", classNames) : "") +
-                  (ids != null && ids.Length > 0 ? "#" + String.Join<Token>("#", ids) : "")
-                  )
+            : base(BuildSelectorString(selector, classNames, ids))
         {
             if (selector == null
                 && (classNames == null || classNames.Length < 1)
@@ -30,22 +26,30 @@ namespace StyleSharp.Tokenizer.Tokens
 
             Selector = selector?.Data;
 
-            var _ClassNames = new List<string>();
+            ClassNames = new HashSet<string>();
             foreach (var c in classNames)
-                _ClassNames.Add(c.Data);
-            ClassNames = _ClassNames.ToArray();
+                ClassNames.Add(c.Data);
 
-            var _Ids = new List<string>();
+            Ids = new HashSet<string>();
             foreach (var i in ids)
-                _Ids.Add(i.Data);
-            Ids = _Ids.ToArray();
+                Ids.Add(i.Data);
         }
 
-        public override string ToString()
+        public bool HasClass(string s)
+        {
+            return ClassNames.Contains(s);
+        }
+
+        public bool HasId(string s)
+        {
+            return Ids.Contains(s);
+        }
+
+        private static string BuildSelectorString(Token Selector, Token[] ClassNames, Token[] Ids)
         {
             return Selector
-                + (ClassNames.Length > 0 ? "." + String.Join(".", ClassNames) : "")
-                + (Ids.Length > 0 ? "#" + String.Join("#", Ids) : "");
+                + (ClassNames.Length > 0 ? "." + String.Join<Token>(".", ClassNames) : "")
+                + (Ids.Length > 0 ? "#" + String.Join<Token>("#", Ids) : "");
         }
     }
 }

@@ -51,8 +51,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TokenizerTest.cs" />
     <Compile Include="StringExtensionsTest.cs" />
+    <Compile Include="DOMTreeTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GenericTest1.GenericTest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

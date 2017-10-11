@@ -17,18 +17,43 @@ namespace StyleSharp.DOM
 
         public void ApplyStyleSheet(StyleSheet s)
         {
-            ApplyStyleToElement(Root, s);
+            ApplyStyleSheetToElement(Root, s);
         }
 
-        protected void ApplyStyleToElement(IDOMElement e, StyleSheet s)
+        protected void ApplyStyleSheetToElement(IDOMElement e, StyleSheet s)
         {
+            Console.WriteLine("Applying all to Element " + e.Selector);
+
             foreach (var style in s)
             {
-                if (e.Selector == style.Selector.Selector)
+                ApplyStyleSetToElement(e, style);
+            }
+
+            ApplyStyleToChildren(e, s);
+        }
+
+        protected void ApplyStyleSetToElement(IDOMElement e, StyleSet style)
+        {
+            if (e.Selector == style.Selector.Selector)
+            {
+                foreach (var c in style.Selector.ClassNames)
+                    if (!style.Selector.HasClass(c))
+                        return;
+                foreach (var i in style.Selector.Ids)
+                    if (!style.Selector.HasId(i))
+                        return;
+
+                Console.WriteLine("style " + style.Selector + " matches on " + e.Selector);
+
+                e.Styles = new RuleCollection();
+                foreach (var r in style.Rules)
                 {
-                    // todo check classes and ids
-                    e.Styles = style;
-                    ApplyStyleToChildren(e, s);
+                    if (!e.Styles.ContainsKey(r.Key) || !e.Styles[r.Key].IsImportant)
+                    {
+                        e.Styles.Add(r.Key, r.Value);
+                        Console.WriteLine("adding " + r.Key + " : " + r.Value);
+                        continue;
+                    }
                 }
             }
         }
@@ -36,7 +61,7 @@ namespace StyleSharp.DOM
         protected void ApplyStyleToChildren(IDOMElement e, StyleSheet s)
         {
             foreach (var c in e.Children)
-                ApplyStyleToElement(c, s);
+                ApplyStyleSheetToElement(c, s);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace StyleSharp.Tokenizer
 
         public override string ToString()
         {
-            return $"[{GetType().Name}: \"{Data}\"]";
+            return Data;
         }
 
         public static Token CreateToken(string data)

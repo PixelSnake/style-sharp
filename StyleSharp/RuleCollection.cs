@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StyleSharp.Tokenizer
+namespace StyleSharp
 {
-    public class RuleCollection : Dictionary<string, StyleValue.StyleValue>
+    public class RuleCollection : Dictionary<string, Tokenizer.StyleValue.StyleValue>
     {}
 }
